@@ -6,16 +6,17 @@ from datetime import datetime, timedelta
 # Output should include book ID, title, and author
 
 
-def print_books():
+def print_available():
     for book in library_books:
-        print(book["id"])
-        print(book["title"])
-        print(book["author"])
-        print()
+        if book["available"] == True:
+            print(f"ID: {book["id"]}")
+            print(f"Title: {book["title"]}")
+            print(f"Author: {book["author"]}")
+            print()
 
 
         
-print_books()
+print_available()
 
 # -------- Level 2 --------
 # TODO: Create a function to search books by author OR genre
@@ -125,6 +126,54 @@ print(f"The following books are overdue:{view_overdue()}")
 # - Save/load catalog to file (CSV or JSON)
 # - Anything else you want to build on top of the system!
 
+class Book:
+    def __init__(self, id, title, author, genre, available, due_date, checkouts):
+        self.id = id
+        self.title = title
+        self.author = author
+        self.genre = genre
+        self.available = available
+        self.due_date = due_date
+        self.checkouts = checkouts
+
+    def print_available(book_list):
+        for book in book_list:
+            if book.available == True:
+                print(f"ID: {book.id}")
+                print(f"Title: {book.title}")
+                print(f"Author: {book.author}")
+
+    def search(book_list):
+    #empty list so we can add the book to the return list if the genre/author matches up with the term
+        returned_books = []
+        term = input("Enter a search term: ")
+
+        #checking each book's genre and author
+        for book in book_list:
+            if book.author.lower() == term.lower(): #checking if book's author matches up with the user-entered term
+                returned_books.append(book.title) #adding it to a list so we can return more than one item
+            if book.genre.lower() == term.lower(): #checking if book's genre matches up with the user-entered term
+                returned_books.append(book.title) 
+
+        return returned_books
+
 if __name__ == "__main__":
     # You can use this space to test your functions
+
+    #each book is an object of the Book class
+    book1 = Book("B1", "The Lightning Thief", "Rick Riordan", "Fantasy", True, None, 2)
+    book2 = Book("B2", "To Kill a Mockingbird", "Harper Lee", "Historical", False, "2025-11-01", 5)
+    book3 = Book("B3", "The Great Gatsby", "F. Scott Fitzgerald", "Classic", True, None, 3)
+    book4 = Book("B4", "1984", "George Orwell", "Dystopian", True, None, 4)
+    book5 = Book("B5", "Pride and Prejudice", "Jane Austen", "Romance", True, None, 6)
+    book6 = Book("B6", "The Hobbit", "J.R.R. Tolkein", "Fantasy", False, "2025-11-10", 8)
+    book7 = Book("B7", "Fahrenheit 451", "Ray Bradbury", "Science Fiction", True, None, 1)
+    book8 = Book("B8", "The Catcher in the Rye", "J.D. Salinger", "Coming-of-Age", False, "2025-11-12", 3)
+
+    #Creating a list of all the objects
+    book_list = [book1, book2, book3, book4, book5, book6, book7, book8]
+
+    Book.print_available(book_list)
+    print(Book.search(book_list))
+
     pass
