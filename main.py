@@ -13,6 +13,7 @@ def print_available():
             print(f"Title: {book["title"]}")
             print(f"Author: {book["author"]}")
             print()
+    print()
 
 
         
@@ -72,6 +73,7 @@ def checkout():
         #I used .date() for the code above to format the date in a year-month-day format
         #I also casted the date object to a string so it does not cause complications in the code later when I do comparisons between dates.
         print(f"Your book, {library_books[book_index]["title"]}, will be due on {library_books[book_index]["due_date"]}")
+    print()
 
 checkout()
 
@@ -89,6 +91,9 @@ def return_book():
 
     library_books[book_index]["available"] = True
     library_books[book_index]["due_date"] = None
+    print(f"The book {library_books[book_index]["title"]} has been successfully returned.")
+    print()
+
 
 
 return_book()
@@ -142,6 +147,7 @@ class Book:
                 print(f"ID: {book.id}")
                 print(f"Title: {book.title}")
                 print(f"Author: {book.author}")
+        print()
 
     def search(book_list):
     #empty list so we can add the book to the return list if the genre/author matches up with the term
@@ -153,10 +159,69 @@ class Book:
             if book.author.lower() == term.lower(): #checking if book's author matches up with the user-entered term
                 returned_books.append(book.title) #adding it to a list so we can return more than one item
             if book.genre.lower() == term.lower(): #checking if book's genre matches up with the user-entered term
-                returned_books.append(book.title) 
+                returned_books.append(book.title)
+ 
 
         return returned_books
 
+    def checkout(book_list):
+        chosen_book = input("Which book would you like to check out? Please enter its ID: ")
+        for book in book_list:
+            if book.id == chosen_book:
+                if book.available == False:
+                    print("This book is not available. Please check out another book.")
+
+                else:
+                    book.available = False
+                    book.checkouts+=1
+
+                    now=datetime.now()
+                    two_weeks = timedelta(days=+14)
+                    book.due_date = str((now+two_weeks).date())
+                    print(f"Your book, {book.title}, will be due on {book.due_date}")
+        print()
+
+    def return_book(book_list):
+        returned_book = input("Which book would you like to return? Please use its ID: ")
+
+        for book in book_list:
+            if book.id == returned_book:
+                book.available = True
+                book.due_date = None
+                print(f"The book {book.title} has been successfully returned.")
+                print()
+                break
+        else:
+            print("This ID does not exist in the system.")
+
+
+    def view_overdue(book_list):
+        overdue_books = []
+        for book in book_list:
+            #Looking for books that are not available, meaning they are checked out
+            if book.available == False:
+
+                #This avoids having to compare a String with "None"            
+                if book.due_date != None:
+                    
+                    #With the code below, I am checking if the due date passed by comparing the due_date to the date object, which is type string now.
+                    if book.due_date < str(datetime.now().date()):
+                        overdue_books.append(book.title)
+
+        return(overdue_books)
+    
+    def view_popular(book_list):
+        checkout_list = []
+        for book in book_list:
+            checkout_list.append(book.checkouts)
+        checkout_list.sort(reverse = True)
+        
+
+  
+
+    
+
+        
 if __name__ == "__main__":
     # You can use this space to test your functions
 
@@ -173,7 +238,32 @@ if __name__ == "__main__":
     #Creating a list of all the objects
     book_list = [book1, book2, book3, book4, book5, book6, book7, book8]
 
-    Book.print_available(book_list)
-    print(Book.search(book_list))
+
+    
+
+    print("Welcome to the library. Please choose from the following options:")
+    print("1. View available books")
+    print("2. Search for a book")
+    print("3. Check out a book")
+    print("4. Return a book")
+    print("5. View overdue books")
+    print("6. View top 3 most checked-out books")
+
+    number = input("enter the number of your choice. ")
+    if number == str(1):
+        Book.print_available(book_list)
+    if number == str(2):
+        print(Book.search(book_list))
+    if number == str(3):
+        Book.checkout(book_list)
+    if number == str(4):
+        Book.return_book(book_list)
+    if number == str(5):
+        print(f"The following books are overdue:{view_overdue(book_list)}")     
+    if number == str(6):
+        Book.view_popular(book_list)
+
+    
+
 
     pass
