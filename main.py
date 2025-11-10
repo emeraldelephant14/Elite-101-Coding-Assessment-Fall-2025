@@ -215,6 +215,14 @@ class Book:
         for book in book_list:
             checkout_list.append(book.checkouts)
         checkout_list.sort(reverse = True)
+
+        for book in book_list:
+            if book.checkouts == checkout_list[0]:
+                print(f"Most checked out book: {book.title}")
+            if book.checkouts == checkout_list[1]:
+                print(f"Second most checked out book: {book.title}")
+            if book.checkouts == checkout_list[2]:
+                print(f"Third most checked out book: {book.title}")
         
 
   
@@ -238,9 +246,6 @@ if __name__ == "__main__":
     #Creating a list of all the objects
     book_list = [book1, book2, book3, book4, book5, book6, book7, book8]
 
-
-    
-
     print("Welcome to the library. Please choose from the following options:")
     print("1. View available books")
     print("2. Search for a book")
@@ -248,6 +253,7 @@ if __name__ == "__main__":
     print("4. Return a book")
     print("5. View overdue books")
     print("6. View top 3 most checked-out books")
+    print("7. Exit")
 
     number = input("enter the number of your choice. ")
     if number == str(1):
@@ -262,6 +268,9 @@ if __name__ == "__main__":
         print(f"The following books are overdue:{view_overdue(book_list)}")     
     if number == str(6):
         Book.view_popular(book_list)
+    if number == str(7):
+        print("Goodbye!")
+        
 
     
 
