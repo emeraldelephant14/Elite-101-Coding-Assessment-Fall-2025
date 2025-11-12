@@ -238,31 +238,27 @@ class Book:
     
     def view_popular(book_list):
         checkout_list = []
-        #intiializing the list with numbers because I add books in specific places using their indices
-        ordered_list=[1,1,1]
+        top_books=[]
 
         for book in book_list:
             #Adding all checkouts to the list so I can order it
             checkout_list.append(book.checkouts)
         #The checkouts are in descending order (most checkouts first)
-        checkout_list.sort(reverse = True)
+        checkout_list.sort(reverse=True)
 
-        for book in book_list:
-            #If a book's checkouts match to the biggest number of checkouts (which would be at index 0) in the ordered checkout list, add the book to the first position of the ordered list
-            if book.checkouts == checkout_list[0]:
-                ordered_list[0]=book.title
-            if book.checkouts == checkout_list[1]:
-                ordered_list[1]=book.title
-            if book.checkouts == checkout_list[2]:
-                ordered_list[2]=book.title
+        #new list containing only the first 3 items in checkout_list
+        top_checks = checkout_list[:3]
+
+        #loops through each element in top_checks and compares it to every element in book_list
+        for check in top_checks:
+            for book in book_list:
+                if book.checkouts == check and book.title not in top_books: #ensures that a book isn't added twice
+                    top_books.append(book.title)
+                    break  # move to the next checkout number once a match is found
+
         print()
-        return ordered_list
+        return top_books 
 
-        
-
-  
-
-    
 
         
 if __name__ == "__main__":
@@ -306,7 +302,7 @@ if __name__ == "__main__":
         elif number == str(5):
             print(f"The following books are overdue:{Book.view_overdue(book_list)}")     
         elif number == str(6):
-            print(f"The three most checked-out books, in descending order, are the following: {Book.view_popular(book_list)}")
+            print(f"The three most checked-out books are the following: {Book.view_popular(book_list)}")
         else:
             print("This is not a valid number.")
 
